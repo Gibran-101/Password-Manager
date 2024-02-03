@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -14,16 +15,31 @@ lock = PhotoImage(file="logo.png")
 canvas.create_image(100, 100, image=lock)
 canvas.grid(row=0, column=1)
 
-def save():
-    web_text = website_entry.get()
-    mail_text = email_entry.get()
-    password_text = password_entry.get()
-    with open("data.txt", mode='a') as data:
-        data.write(f"Website: {web_text}, Email Address: {mail_text}, Password: {password_text}\n")
+
+def clear_canvas():
     website_entry.delete(0, END)
     email_entry.delete(0, END)
     email_entry.insert(0, "username@gmail.com")
     password_entry.delete(0, END)
+
+
+def save():
+    web_text = website_entry.get()
+    mail_text = email_entry.get()
+    password_text = password_entry.get()
+
+    is_ok = messagebox.askokcancel(title=web_text, message=f"These are the details entered: \n{mail_text} "
+                                                             f"\n{password_text} \n Is it ok to save?")
+
+    if website_entry.get() == "" or password_entry.get() == "":
+        messagebox.showwarning("Warning", "The credentials are empty.")
+
+    if is_ok:
+        with open("data.txt", mode='a') as data:
+            data.write(f"Website: {web_text}, Email Address: {mail_text}, Password: {password_text}\n")
+            clear_canvas()
+    else:
+        clear_canvas()
 
 
 website_label = Label(text="Website:", bg="white")
