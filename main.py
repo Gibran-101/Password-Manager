@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from random import randint, choice, shuffle
 import pyperclip
+import json
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -36,19 +37,31 @@ def save():
     web_text = website_entry.get()
     mail_text = email_entry.get()
     password_text = password_entry.get()
+    new_data = {
+        web_text: {
+            "email": mail_text,
+            "password": password_text,
+        }
+    }
 
-    is_ok = messagebox.askokcancel(title=web_text, message=f"These are the details entered: \n{mail_text} "
-                                                             f"\n{password_text} \n Is it ok to save?")
+    # is_ok = messagebox.askokcancel(title=web_text, message=f"These are the details entered: \n{mail_text} "
+    #                                                          f"\n{password_text} \n Is it ok to save?")
 
     if website_entry.get() == "" or password_entry.get() == "":
         messagebox.showwarning("Warning", "The credentials are empty.")
 
-    if is_ok:
-        with open("data.txt", mode='a') as data:
-            data.write(f"Website: {web_text}, Email Address: {mail_text}, Password: {password_text}\n")
-            clear_canvas()
     else:
-        clear_canvas()
+        with open("data.json", mode='r') as data_file:
+            # it reads the old data from json file
+            current_data = json.load(data_file)
+            # this updates the content of json file
+            # new_data which you see here is the dic which we have created in the save() function
+            current_data.update(new_data)
+
+        with open("data.json", mode='w') as data_file:
+            # this writes the updated data back into the file
+            json.dump(current_data, data_file, indent=4)
+            clear_canvas()
 
 # ---------------------------- UI SETUP ------------------------------- #
 
