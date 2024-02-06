@@ -68,6 +68,22 @@ def save():
         finally:
             clear_canvas()
 
+
+# ---------------------------- FIND PASSWORD -------------------------------- #
+def find_password():
+    web_text = website_entry.get().title()
+    with open("data.json", mode='r') as data_file:
+        file_info = json.load(data_file)
+        if web_text in file_info:
+            website_name = web_text
+            email_name = file_info[web_text]["email"]
+            password_name = file_info[web_text]["password"]
+            print(f"{website_name}, {password_name}")
+            messagebox.showinfo(title=web_text, message=f"Email Address: {email_name} \n Password: {password_name}")
+        else:
+            messagebox.showinfo(title="ERROR", message=f"Details not found for {web_text}")
+
+
 # ---------------------------- UI SETUP ------------------------------- #
 
 
@@ -89,16 +105,19 @@ email_label.grid(row=2, column=0)
 password_label = Label(text="Password:", bg="white")
 password_label.grid(row=3, column=0)
 
-website_entry = Entry(width=43)
-website_entry.grid(row=1, column=1, columnspan=2)
+website_entry = Entry(width=34)
+website_entry.grid(row=1, column=1)
 website_entry.focus()
 
 email_entry = Entry(width=43)
 email_entry.grid(row=2, column=1, columnspan=2)
 email_entry.insert(0, "username@gmail.com")
 
-password_entry = Entry(width=33, show="*", )
+password_entry = Entry(width=34, show="*")
 password_entry.grid(row=3, column=1)
+
+search_data = Button(text="Search", bg="white", highlightthickness=0, command=find_password)
+search_data.grid(row=1, column=2)
 
 password_generator = Button(text="Generate", bg="white", highlightthickness=0, command=generate_password)
 password_generator.grid(row=3, column=2)
