@@ -33,6 +33,11 @@ def clear_canvas():
     password_entry.delete(0, END)
 
 
+def write_to_file(content):
+    with open("data.json", mode='w') as data_file:
+        json.dump(content, data_file, indent=4)
+
+
 def save():
     web_text = website_entry.get()
     mail_text = email_entry.get()
@@ -43,9 +48,6 @@ def save():
             "password": password_text,
         }
     }
-
-    # is_ok = messagebox.askokcancel(title=web_text, message=f"These are the details entered: \n{mail_text} "
-    #                                                          f"\n{password_text} \n Is it ok to save?")
 
     if website_entry.get() == "" or password_entry.get() == "":
         messagebox.showwarning("Warning", "The credentials are empty.")
@@ -59,12 +61,10 @@ def save():
                 # new_data which you see here is the dic which we have created in the save() function
                 current_data.update(new_data)
         except FileNotFoundError:
-            with open("data.json", mode='w') as data_file:
-                json.dump(new_data, data_file, indent=4)
+            write_to_file(new_data)
         else:
-            with open("data.json", mode='w') as data_file:
-                # this writes the updated data back into the file
-                json.dump(current_data, data_file, indent=4)
+            # this writes the updated data back into the file
+            write_to_file(current_data)
         finally:
             clear_canvas()
 
