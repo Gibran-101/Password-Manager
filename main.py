@@ -51,17 +51,21 @@ def save():
         messagebox.showwarning("Warning", "The credentials are empty.")
 
     else:
-        with open("data.json", mode='r') as data_file:
-            # it reads the old data from json file
-            current_data = json.load(data_file)
-            # this updates the content of json file
-            # new_data which you see here is the dic which we have created in the save() function
-            current_data.update(new_data)
-
-        with open("data.json", mode='w') as data_file:
-            # this writes the updated data back into the file
-            json.dump(current_data, data_file, indent=4)
-            clear_canvas()
+        try:
+            with open("data.json", mode='r') as data_file:
+                # it reads the old data from json file
+                current_data = json.load(data_file)
+                # this updates the content of json file
+                # new_data which you see here is the dic which we have created in the save() function
+                current_data.update(new_data)
+        except FileNotFoundError:
+            with open("data.json", mode='w') as data_file:
+                json.dump(new_data, data_file, indent=4)
+        else:
+            with open("data.json", mode='w') as data_file:
+                # this writes the updated data back into the file
+                json.dump(current_data, data_file, indent=4)
+                clear_canvas()
 
 # ---------------------------- UI SETUP ------------------------------- #
 
