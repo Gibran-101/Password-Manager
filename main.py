@@ -65,7 +65,8 @@ def save():
             with open("data.json", mode='w') as data_file:
                 # this writes the updated data back into the file
                 json.dump(current_data, data_file, indent=4)
-                clear_canvas()
+        finally:
+            clear_canvas()
 
 # ---------------------------- UI SETUP ------------------------------- #
 
